@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="en"><head><base target="_top"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>Zero Food waste</title>
+<style>
+:root{--bg:#f6f8fb;--cd:#fff;--tx:#0f172a;--mu:#64748b;--bd:#e2e8f0;--pr:#2563eb;--ok:#16a34a;--er:#dc2626;--warn:#b45309}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1220;--cd:#131c2e;--tx:#e5eaf3;--mu:#93a1b8;--bd:#25324a;--pr:#3b82f6}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Segoe UI',Roboto,Arial,sans-serif;padding-bottom:140px}
+.w{max-width:980px;margin:0 auto;padding:10px 14px}
+.mu{color:var(--mu);font-size:13px}
+input,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;font-size:15px}
+textarea{resize:vertical}
+.btn{background:var(--pr);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.o{background:transparent;color:var(--tx);border:1px solid var(--bd)}.btn:disabled{opacity:.5}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:14px}
+.r2{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed var(--bd)}
+.brand{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:22px;color:var(--pr)}
+.brand img{height:48px;max-width:180px;object-fit:contain}
+.hdr{justify-content:flex-start;font-size:30px;padding:10px 0 4px}.hdr img{height:64px;max-width:240px}
+.tgl{text-align:center;color:var(--mu);font-size:12px;margin:-2px 0 8px;font-style:italic;letter-spacing:.02em}
+.notes{background:var(--cd);border:1px dashed var(--bd);border-radius:12px;padding:14px 16px;margin-top:14px;font-size:14px;line-height:1.6;white-space:pre-line}
+.notes h4{margin:0 0 8px;font-size:15px;color:var(--pr)}
+#top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#top b{flex:1;font-size:14px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.im{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:44px;border-radius:10px;overflow:hidden}.im img{width:100%;height:100%;object-fit:cover}
+.pr{font-size:20px;font-weight:700;margin:8px 0}
+.st{display:flex;gap:8px;align-items:center}.st button{width:38px;height:38px;border-radius:10px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);font-size:20px}
+.st input{width:70px;margin:0;text-align:center;font-weight:700;padding:8px}
+footer{position:fixed;left:0;right:0;bottom:0;background:#0f172a;color:#fff;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));z-index:20}
+.fi{max-width:980px;margin:0 auto}
+/* pay */
+.pay{background:var(--cd);border:1px solid var(--ok);border-radius:14px;padding:18px;margin-top:14px;text-align:center}
+.pay h3{margin:0 0 6px;font-size:18px}.pay .amt{font-size:28px;font-weight:800;color:var(--ok);margin:4px 0 12px}
+.pay .urow{display:flex;gap:8px;margin-top:14px;align-items:center}
+.pay .urow input{flex:1;padding:12px;font-size:15px}
+.pst{display:inline-block;padding:3px 10px;border-radius:12px;font-size:13px;font-weight:700}
+.pst.pending{background:#fef9c3;color:#854d0e}.pst.verified{background:#dcfce7;color:#15803d}.pst.rejected{background:#fee2e2;color:#991b1b}
+/* admin */
+#aapp .row{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-top:8px}
+#aapp .row>*{flex:1 1 140px}
+#aapp .row>button{flex:0 0 auto}
+.ap{border:1px solid var(--bd);border-radius:12px;padding:10px;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-x:auto}
+th,td{padding:6px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{background:var(--bg)}
+td.w2{white-space:normal;min-width:180px;max-width:260px}
+.atab{display:flex;overflow-x:auto;gap:0;margin-bottom:12px;border-bottom:2px solid var(--bd)}
+.atab button{background:none;border:none;padding:10px 14px;font:inherit;font-size:14px;font-weight:600;color:var(--mu);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px}
+.atab button.on{color:var(--pr);border-bottom-color:var(--pr)}
+.apane{display:none}.apane.on{display:block}
+#lg{max-width:360px;margin:10vh auto;text-align:center;position:relative}
+#ch{max-width:400px;margin:8vh auto;text-align:center;position:relative;padding:24px 20px}
+/* mobile */
+@media(max-width:599px){
+ #grid{grid-template-columns:1fr}
+ .hdr img{height:48px}.hdr{font-size:24px}
+ #aapp .row{flex-direction:column}
+ #aapp .row>*{flex:unset;width:100%}
+ #aapp .row>button{width:auto}
+ .pay canvas{max-width:140px}
+ table{font-size:12px}th,td{padding:4px 5px}
+ .cd{padding:10px 12px}
+ footer{padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
+}
+</style></head>
+<body>
+<div class="w">
+<!-- CHOICE -->
+<div id="ch" class="cd">
+  <button class="btn o" id="chA" style="position:absolute;top:10px;right:10px;padding:5px 10px;font-size:11px;font-weight:600">⚙ Admin</button>
+  <div class="brand"></div>
+  <div class="tgl" id="chTgl"></div>
+  <div class="mu" style="margin-top:8px">Choose how you want to log in</div>
+  <button class="btn" id="chC" style="width:100%;margin-top:20px;padding:16px;font-size:18px">Login</button>
+</div>
+
+<!-- CUSTOMER LOGIN -->
+<div id="login" class="cd" hidden style="max-width:400px;margin:0 auto">
+  <div class="brand"></div>
+  <h1>Login</h1>
+  <div class="mu">Login with your 10-digit mobile number</div>
+  <input id="ph" inputmode="tel" placeholder="10-digit mobile number" style="margin-top:10px">
+  <div id="nw" hidden>
+    <div class="mu" style="margin-top:10px">New customer — enter your details once</div>
+    <input id="nm" placeholder="Full name" style="margin-top:8px">
+    <textarea id="ad" style="min-height:84px;margin-top:8px" placeholder="Full delivery address (house/flat, street, area, city, state, PIN)"></textarea>
+  </div>
+  <div id="err" style="color:var(--er);font-size:13px;min-height:18px;margin-top:8px"></div>
+  <button class="btn" id="go" style="width:100%;margin-top:12px">Continue</button>
+  <button class="btn o" data-back style="width:100%;margin-top:8px">← Back</button>
+  <div class="mu" style="margin-top:16px">📞 Customer care: <a class="care" href="tel:8754312208" style="color:inherit;font-weight:700">8754312208</a></div>
+</div>
+
+<!-- CUSTOMER APP -->
+<div id="capp" hidden>
+  <div class="brand hdr"></div>
+  <div class="tgl" id="cTgl"></div>
+  <div id="cdtHdr" hidden style="background:#0f172a;color:#fff;text-align:center;padding:8px 14px;border-radius:12px;margin-bottom:10px;font-variant-numeric:tabular-nums"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.65">Order closes in</div><div id="cdtTop" style="font-size:28px;font-weight:900;line-height:1.1;letter-spacing:.01em">--</div></div>
+  <div id="top"><b id="hi"></b><button class="btn o" id="out" style="padding:7px 12px;font-size:13px">Logout</button></div>
+  <div id="dv" class="cd" style="margin-bottom:12px;border-color:var(--ok);font-size:16px"></div>
+  <div id="msg"></div>
+  <div id="grid"></div>
+  <div id="mo" class="cd" hidden style="margin-top:14px"></div>
+  <div id="ad2" class="cd" style="margin-top:14px"></div>
+  <div id="paySection"></div>
+  <div id="notesDiv" class="notes" hidden></div>
+  <div class="mu" style="text-align:center;margin:18px 0 8px;font-size:15px">📞 Customer care: <a class="care" href="tel:8754312208" style="color:inherit;font-weight:700">8754312208</a></div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="lg" class="cd" hidden>
+  <div class="brand"></div>
+  <h2 style="margin:4px 0">Admin Login</h2>
+  <div class="mu">Admin access only</div>
+  <input id="pw" type="password" placeholder="Admin password" style="margin-top:10px">
+  <div id="le" style="color:var(--er);font-size:13px;min-height:18px;margin:8px 0"></div>
+  <button class="btn" id="lgo" style="width:100%">Login</button>
+  <button class="btn o" data-back style="width:100%;margin-top:8px">← Back</button>
+</div>
+
+<!-- ADMIN APP -->
+<div id="aapp" hidden>
+  <div class="brand hdr"></div>
+  <div style="display:flex;align-items:center;gap:8px;margin:4px 0 10px">
+    <span style="flex:1;font-size:13px;color:var(--mu)" id="aHi">Admin</span>
+    <button class="btn o" id="rf" style="padding:6px 10px;font-size:13px">⟳ Refresh</button>
+    <button class="btn o" id="lo" style="padding:6px 10px;font-size:13px">Logout</button>
+  </div>
+  <div class="atab">
+    <button class="on" data-tab="set">⚙ Settings</button>
+    <button data-tab="sum">📊 Summary</button>
+    <button data-tab="ord">📋 Orders</button>
+  </div>
+  <div id="set" class="apane on"></div>
+  <div id="sum" class="apane"></div>
+  <div id="ord" class="apane"></div>
+</div>
+</div>
+
+<footer id="ft" hidden>
+<div class="fi">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="btn" id="pl" style="font-size:16px;padding:14px 22px;white-space:nowrap">Place Order</button>
+    <div id="why" style="font-size:12px;opacity:.75;flex:1"></div>
+  </div>
+  <div id="ct" style="display:none"></div>
+  <div id="cdt" style="display:none"></div>
+</div>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const inr=n=>'₹'+(Math.round(n*100)/100).toLocaleString('en-IN');
+const rng=(a,b)=>a===b?inr(a):inr(a)+' - '+inr(b);
+const LS={g(k){try{return localStorage.getItem(k)||''}catch(e){return ''}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}},d(k){try{localStorage.removeItem(k)}catch(e){}}};
+
+const API_URL="https://script.google.com/macros/s/AKfycbyFAdSuq4p51DbFHEwmPc7_36sbIClELfaa3MU3eVuFYqSkPPMG1asaid0fvCreXupMOA/exec";
+const run=(f,...a)=>{
+  if(typeof google!=='undefined'&&google.script&&google.script.run)
+    return new Promise((ok,no)=>google.script.run.withSuccessHandler(ok).withFailureHandler(e=>no(e))[f](...a));
+  if(!API_URL||API_URL.indexOf('PASTE')===0)
+    return Promise.reject(new Error('Please open this page from your Apps Script web app link (ending /exec).'));
+  return fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:f,args:a})})
+    .catch(()=>{throw new Error('Cannot reach the server. Check API_URL and that the deployment access is "Anyone".')})
+    .then(r=>r.text()).then(t=>{let j;try{j=JSON.parse(t)}catch(e){throw new Error('The server did not return valid data. Redeploy Code.gs as a New version.')}if(!j.ok)throw new Error(j.error);return j.data});
+};
+
+let SH,ME,Q={},OFF=0,isNew=false,TOK='',QU={},QT=null,UPIID='',BRAND='Zero Food waste';
+const closed=()=>!!(SH&&SH.deadline&&Date.now()+OFF>=new Date(SH.deadline).getTime());
+const t12=h=>{if(!h)return '';const a=h.split(':'),H=+a[0];return ((H%12)||12)+':'+a[1]+' '+(H<12?'AM':'PM')};
+const dtm=()=>{if(!SH||!SH.deliveryTime)return '';return t12(SH.deliveryTime)+(SH.deliveryTo?' - '+t12(SH.deliveryTo):'')}
+const dd=()=>{if(!SH||!SH.delivery)return 'To be announced';const a=SH.delivery.split('-');return new Date(a[0],a[1]-1,a[2]).toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'})};
+const dall=()=>dd()+(dtm()?' · '+dtm():'');
+
+function brand(logo,nm){
+  if(nm)BRAND=nm;
+  document.querySelectorAll('.brand').forEach(el=>{
+    el.innerHTML=(logo?'<img src="'+esc(logo)+'" alt="">':'<span style="font-size:'+(el.classList.contains('hdr')?'52':'38')+'px">🌱</span>')+'<span>'+esc(BRAND)+'</span>';
+  });
+  document.title=BRAND;
+}
+function setCare(n){n=String(n||'8754312208').trim();document.querySelectorAll('a.care').forEach(a=>{a.textContent=n;a.href='tel:'+n.replace(/[^\d+]/g,'')})}
+function setTagline(t){document.querySelectorAll('.tgl').forEach(el=>{el.textContent=t||'';el.hidden=!t})}
+function setNotes(n){const el=$('#notesDiv');if(!el)return;el.innerHTML=n?('<h4>📋 Notes &amp; Instructions</h4>'+esc(n)):'';el.hidden=!n}
+
+brand('');
+run('shop').then(x=>{SH=x;brand(x.logo,x.brandName);setCare(x.care);setTagline(x.tagline);UPIID=x.upiId||''}).catch(()=>{});
+
+document.querySelectorAll('.atab button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.atab button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.apane').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');document.getElementById(b.dataset.tab).classList.add('on')
+});
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{$('#login').hidden=true;$('#lg').hidden=true;$('#ch').hidden=false});
+$('#chC').onclick=()=>{$('#ch').hidden=true;$('#login').hidden=false;$('#ph').focus()};
+$('#chA').onclick=()=>{$('#ch').hidden=true;$('#lg').hidden=false;$('#pw').focus()};
+
+$('#ph').addEventListener('input',()=>{$('#ph').value=$('#ph').value.replace(/\D/g,'');isNew=false;$('#nw').hidden=true;$('#err').textContent=''});
+
+$('#go').onclick=async()=>{
+  const er=$('#err');er.textContent='';$('#go').disabled=true;
+  try{
+    const phone=$('#ph').value.trim();
+    if(!/^\d{10}$/.test(phone))return(er.textContent='Mobile number must be exactly 10 digits'+(phone.length?(' (you entered '+phone.length+').'):'.'));
+    if(!isNew){
+      const r=await run('login',phone);
+      if(!r.exists){isNew=true;$('#nw').hidden=false;er.textContent='New number — please add your name and address.';return}
+      await enter(r.phone,r.token);
+    }else{
+      const r=await run('register',phone,$('#nm').value,$('#ad').value);
+      await enter(r.data.phone,r.token);
+    }
+  }catch(e){er.textContent=e.message||e}finally{$('#go').disabled=false}
+};
+
+async function enter(p,tk){
+  SH=SH||(await run('shop'));
+  ME=await run('me',p,tk);
+  TOK=tk;OFF=(SH.now||Date.now())-Date.now();Q=Object.assign({},ME.items);
+  LS.s('gp',p);LS.s('gt',tk);
+  brand(SH.logo,SH.brandName);setCare(SH.care);setTagline(SH.tagline);
+  UPIID=SH.upiId||'';setNotes(SH.notes);
+  $('#ch').hidden=true;$('#login').hidden=true;$('#capp').hidden=false;$('#ft').hidden=false;
+  draw();
+}
+$('#out').onclick=()=>{LS.s('gp','');LS.s('gt','');location.reload()};
+
+function draw(){
+  if(!SH||!ME)return;
+  $('#hi').textContent='Hi, '+ME.name+' ('+ME.phone+')';
+  $('#dv').innerHTML='🚚 <b>Delivery:</b> <span style="font-weight:800">'+esc(dall())+'</span>';
+  $('#grid').innerHTML=SH.products.length?SH.products.map(p=>
+    '<div class="cd"><div class="im">'+(p.img?'<img src="'+esc(p.img)+'" alt="">':'🛍️')+'</div>'+
+    '<div class="pr">'+rng(p.lo,p.hi)+'</div><b>'+esc(p.name)+'</b>'+
+    '<div class="st" style="margin-top:8px">'+
+    '<button data-a="d" data-id="'+p.id+'">−</button>'+
+    '<input type="number" min="0" data-id="'+p.id+'" value="'+(Q[p.id]||0)+'">'+
+    '<button data-a="i" data-id="'+p.id+'">+</button></div>'+
+    (ME.items[p.id]?'<div class="mu" style="margin-top:4px">Placed: '+ME.items[p.id]+' · cannot be reduced</div>':'')+
+    '<div class="fq" data-fq="'+p.id+'" style="margin-top:8px;font-size:14px"></div></div>'
+  ).join(''):'<div class="mu">Products will appear here soon.</div>';
+  drawOrder();drawPay();
+  $('#ad2').innerHTML='<div class="r2" style="border:0"><b>📍 Delivery address</b><button class="btn o" id="ea" style="padding:6px 12px">Edit</button></div>'+
+    '<div id="av">'+esc(ME.name)+' · '+esc(ME.phone)+'<br>'+esc(ME.addr).replace(/\n/g,'<br>')+'</div>';
+  cart();paintQ();refreshQuote();
+}
+
+function drawOrder(){
+  if(!ME||!ME.lines||!ME.lines.length){$('#mo').hidden=true;return}
+  var h='<b>🧾 My Order</b>';
+  ME.lines.forEach(function(l){h+='<div class="r2"><span>'+esc(l.name)+' × '+l.qty+'</span><span>'+inr(l.amount)+'</span></div>'});
+  var dc=ME.deliveryCharge||0;
+  if(dc>0){
+    h+='<div class="r2"><span>Products value</span><span>'+inr(ME.final)+'</span></div>';
+    h+='<div class="r2"><span>Delivery charges</span><span>'+inr(dc)+'</span></div>';
+  }
+  h+='<div class="r2"><b>Total Value</b><b>'+inr(ME.total||ME.final)+'</b></div>';
+  if(!ME.closed)h+='<div class="mu" style="margin-top:4px">Total Value is confirmed when ordering closes.</div>';
+  h+='<div style="margin-top:6px">🚚 Delivery: <b>'+esc(dall())+'</b></div>';
+  $('#mo').innerHTML=h;$('#mo').hidden=false;
+}
+
+$('#grid').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const id=b.dataset.id,placed=ME.items[id]||0;
+  Q[id]=Math.max(placed,(Q[id]||0)+(b.dataset.a==='i'?1:-1));draw();
+});
+$('#grid').addEventListener('change',e=>{
+  if(e.target.dataset.id){Q[e.target.dataset.id]=Math.max(ME.items[e.target.dataset.id]||0,parseInt(e.target.value,10)||0);draw()}
+});
+$('#ad2').addEventListener('click',async e=>{
+  if(e.target.id==='ea'){
+    $('#av').innerHTML='<input id="en" value="'+esc(ME.name)+'"><textarea id="ea2" style="min-height:84px;margin-top:8px">'+esc(ME.addr)+'</textarea>'+
+    '<div id="ee" class="mu" style="color:var(--er)"></div><button class="btn" id="es" style="margin-top:8px">Save</button>';
+  }else if(e.target.id==='es'){
+    try{const r=await run('register',ME.phone,$('#en').value,$('#ea2').value);ME=r.data;draw()}
+    catch(x){$('#ee').textContent=x.message||x}
+  }
+});
+
+function cart(){
+  if(!SH||!ME)return;
+  const had=ME&&ME.lines&&ME.lines.length>0,cl=closed();
+  const btn=$('#pl');
+  btn.textContent=had?'✏️ Update Order':'Place Order';
+  btn.disabled=cl;
+  btn.style.background=had?(cl?'#166534':'#16a34a'):'';
+  btn.style.opacity=cl?'0.6':'1';
+  const why=cl?'Order time is over.':(Object.values(Q).reduce((a,b)=>a+b,0)===0&&!had)?'Tap + to add a product.':'';
+  $('#why').textContent=why;
+}
+
+async function placeOrder(){
+  if(closed())return;
+  var n=0;Object.values(Q).forEach(v=>n+=v||0);
+  const had=ME&&ME.lines&&ME.lines.length>0;
+  if(!n&&!had){$('#msg').innerHTML='<div style="color:var(--er);margin-bottom:10px">Please add a quantity for at least one product.</div>';return}
+  $('#pl').disabled=true;$('#pl').textContent='Saving…';
+  try{
+    ME=await run('saveOrder',ME.phone,Q,TOK);
+    $('#msg').innerHTML='<div style="color:var(--ok);margin-bottom:10px">✅ Order saved! You can update it until the timer ends.</div>';
+    scrollTo({top:0,behavior:'smooth'});
+  }catch(e){
+    $('#msg').innerHTML='<div style="color:var(--er);margin-bottom:10px">'+esc(e.message||e)+'</div>';
+  }
+  draw();
+}
+$('#pl').onclick=placeOrder;
+
+function paintQ(){
+  SH.products.forEach(p=>{
+    const q=Q[p.id]||0,u=QU[p.id],el=document.querySelector('[data-fq="'+p.id+'"]');
+    if(el)el.innerHTML=q>0?(u?'Final Price<div style="font-size:30px;font-weight:800;color:var(--ok);line-height:1.2">'+inr(u.unit)+'</div>':'Calculating…'):'';
+  });
+}
+function refreshQuote(){
+  clearTimeout(QT);if(!ME||!TOK)return;
+  QT=setTimeout(()=>{run('quote',ME.phone,Q,TOK).then(r=>{QU=r;paintQ();cart()}).catch(()=>{})},350);
+}
+
+function upiLink(id,amount,bname){return 'upi://pay?pa='+encodeURIComponent(id)+'&pn='+encodeURIComponent(bname||'Zero Food waste')+'&am='+amount.toFixed(2)+'&cu=INR&tn=GroupOrder'}
+function drawPay(){
+  const el=$('#paySection');if(!el)return;
+  const cl=ME&&(ME.closed||closed());
+  if(!cl||!ME||!ME.lines||!ME.lines.length){el.innerHTML='';return}
+  const amt=ME.total||ME.final||0,uid=UPIID||'';
+  const paid=ME.payStatus==='verified',pending=ME.payStatus==='pending',rejected=ME.payStatus==='rejected';
+  if(paid){el.innerHTML='<div class="pay"><div class="pst verified">✅ Payment Verified</div><div class="mu" style="margin-top:6px">UTR: <b>'+esc(ME.utr)+'</b></div></div>';return}
+  var h='<div class="pay"><h3>💳 Pay & Confirm Order</h3><div class="amt">'+inr(amt)+'</div>';
+  if(uid){
+    h+='<div id="qrbox" style="display:inline-block;margin:6px auto"></div>';
+    h+='<div class="mu" style="margin:8px 0 4px">Scan with any UPI app · UPI ID: <b>'+esc(uid)+'</b></div>';
+    h+='<a class="btn" href="'+esc(upiLink(uid,amt,BRAND))+'" style="display:inline-block;margin-top:10px;text-decoration:none;padding:12px 20px">📱 Open UPI App & Pay</a>';
+  }else{h+='<div class="mu" style="color:var(--warn)">UPI ID not configured. Please contact admin.</div>';}
+  if(pending){h+='<div class="pst pending" style="margin-top:14px">⏳ Payment submitted – awaiting verification</div><div class="mu">UTR: <b>'+esc(ME.utr)+'</b></div>';}
+  else if(rejected){h+='<div class="pst rejected" style="margin-top:14px">❌ Payment rejected. Please pay again and re-submit your UTR.</div>';}
+  if(!paid){h+='<div class="urow"><input id="utrIn" type="text" inputmode="numeric" placeholder="UTR / Transaction ID after paying" value="'+esc(ME.utr||'')+'"><button class="btn" id="utrBtn">Submit</button></div><div class="mu" style="margin-top:4px">Enter the UTR shown in your UPI app after payment.</div>';}
+  h+='</div>';el.innerHTML=h;
+  if(uid&&typeof QRCode!=='undefined'){try{new QRCode(document.getElementById('qrbox'),{text:upiLink(uid,amt,BRAND),width:180,height:180,correctLevel:QRCode.CorrectLevel.M})}catch(e){}}
+  if(!paid)document.getElementById('utrBtn').onclick=async()=>{
+    const utr=document.getElementById('utrIn').value.trim(),btn=document.getElementById('utrBtn');
+    if(utr.length<6){alert('Please enter a valid UTR (at least 6 characters).');return}
+    btn.disabled=true;btn.textContent='Submitting…';
+    try{ME=await run('submitUTR',ME.phone,utr);draw();}catch(e){alert(e.message||e);}
+    finally{btn.disabled=false;btn.textContent='Submit'}
+  };
+}
+
+setInterval(()=>{
+  const el=$('#cdtTop'),hdr=$('#cdtHdr');
+  if(!SH||!el){return}
+  if(!SH.deadline){el.textContent='Not set yet';if(hdr)hdr.hidden=false;return}
+  let s=Math.floor((new Date(SH.deadline).getTime()-Date.now()-OFF)/1000);
+  if(s<=0){el.textContent='Orders closed';if(hdr)hdr.hidden=false;cart();return}
+  const d=Math.floor(s/86400);s%=86400;const p=n=>String(n).padStart(2,'0');
+  el.textContent=d+(d===1?' Day ':' Days ')+p(Math.floor(s/3600))+':'+p(Math.floor(s%3600/60))+':'+p(s%60);
+  if(hdr)hdr.hidden=false;
+},1000);
+
+let TK='',D,DR,touched=false;
+try{TK=sessionStorage.getItem('at')||''}catch(e){}
+
+async function adminLogin(){
+  $('#le').textContent='';
+  try{TK=await run('adminLogin',$('#pw').value);try{sessionStorage.setItem('at',TK)}catch(e){}$('#pw').value='';await load()}
+  catch(e){$('#le').textContent=e.message||e}
+}
+$('#lgo').onclick=adminLogin;$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin()});
+$('#lo').onclick=()=>{try{sessionStorage.removeItem('at')}catch(e){}TK='';location.reload()};
+$('#rf').onclick=()=>{if(touched&&!confirm('Unsaved changes will be lost. Refresh?'))return;load()};
+
+async function load(){
+  try{D=await run('adminData',TK)}catch(e){$('#lg').hidden=false;$('#aapp').hidden=true;$('#le').textContent=e.message||e;return}
+  DR={deadline:D.deadline,deliveryDate:D.deliveryDate,deliveryTime:D.deliveryTime||'',deliveryTo:D.deliveryTo||'',
+      logo:D.logo||'',care:D.care||'',brandName:D.brandName||'',tagline:D.tagline||'',notes:D.notes||'',
+      upiId:D.upiId||'',deliveryCharge:+(D.deliveryCharge||0),products:JSON.parse(JSON.stringify(D.products))};
+  touched=false;
+  $('#ch').hidden=true;$('#lg').hidden=true;$('#aapp').hidden=false;
+  brand(D.logo,D.brandName);drawSet();drawRest();
+}
+
+const tiers=p=>(p.tiers||[]).slice().sort((a,b)=>a.min-b.min);
+const priceAt=(p,t)=>{let r=+p.price||0;tiers(p).forEach(x=>{if(t>=+x.min)r=+x.price});return r};
+const toLocal=iso=>{if(!iso)return '';const d=new Date(iso),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes())};
+const lowest=p=>Math.min.apply(null,[+p.price||0].concat((p.tiers||[]).map(t=>+t.price||0)));
+const fp=p=>{const q=D.totals[p.id]||0;return 'Final price per piece now: <b>'+inr(priceAt(p,q))+'</b> (total ordered '+q+')'};
+
+function drawSet(){
+  var h='<h3 style="margin:0 0 8px">Settings &amp; Products</h3>';
+  h+='<label class="mu">Order closing date &amp; time</label>'+
+     '<input type="datetime-local" data-f="dl" value="'+toLocal(DR.deadline)+'" style="margin:4px 0 8px">';
+  h+='<div class="row"><div><div class="mu">Delivery date</div><input type="date" data-f="dv" value="'+esc(DR.deliveryDate||'')+'"></div>'+
+     '<div><div class="mu">Delivery time from</div><input type="time" data-f="dtm" value="'+esc(DR.deliveryTime||'')+'"></div>'+
+     '<div><div class="mu">Delivery time to (optional)</div><input type="time" data-f="dto" value="'+esc(DR.deliveryTo||'')+'"></div></div>';
+  h+='<div class="row"><div><div class="mu">Delivery Charges (₹) — added to Total Value</div><input data-f="dc" type="number" min="0" placeholder="0" value="'+esc(DR.deliveryCharge||0)+'"></div></div>';
+  h+='<div class="row"><div><div class="mu">Brand / App name</div><input data-f="bn" placeholder="Zero Food waste" value="'+esc(DR.brandName||'')+'"></div></div>';
+  h+='<div class="row"><div><div class="mu">Tagline (shown to customers in small font)</div><input data-f="tgf" placeholder="Fresh. Local. Zero Waste." value="'+esc(DR.tagline||'')+'"></div></div>';
+  h+='<div class="row"><div><div class="mu">Customer care number</div><input data-f="care" type="tel" placeholder="8754312208" value="'+esc(DR.care||'')+'"></div><div><div class="mu">UPI ID (customers pay to this)</div><input data-f="upi" placeholder="yourname@upi" value="'+esc(DR.upiId||'')+'"></div></div>';
+  h+='<div class="row"><div><div class="mu">Notes &amp; Instructions (shown at bottom of customer screen)</div><textarea data-f="notes" style="min-height:90px">'+esc(DR.notes||'')+'</textarea></div></div>';
+  h+='<div class="row"><div><div class="mu">Change admin password (leave blank to keep)</div><input type="password" data-f="apw" placeholder="New password"></div><div><div class="mu">Confirm password</div><input type="password" data-f="apw2" placeholder="Re-enter"></div></div>';
+  h+='<div class="row"><div><div class="mu">Logo</div><div class="row" style="margin:0">'+(DR.logo?'<img src="'+esc(DR.logo)+'" alt="" style="height:48px;max-width:160px;object-fit:contain;flex:0 0 auto">':'<span class="mu">No logo yet</span>')+'<input type="file" accept="image/*" data-lg="1">'+(DR.logo?'<button class="btn o" style="padding:6px 10px;font-size:13px" data-x="rl">Remove</button>':'')+'</div></div></div>';
+  DR.products.forEach((p,i)=>{
+    h+='<div class="ap"><div class="row"><div><div class="mu">Product name</div><input data-f="n" data-i="'+i+'" value="'+esc(p.name)+'" placeholder="Product name"></div><div><div class="mu">Base price ₹</div><input data-f="pr" data-i="'+i+'" type="number" value="'+esc(p.price)+'"></div></div>';
+    h+='<div class="row">'+(p.img?'<img src="'+esc(p.img)+'" alt="" style="width:56px;height:42px;object-fit:cover;border-radius:6px;flex:0 0 56px">':'')+'<input type="file" accept="image/*" data-up="'+i+'"></div>';
+    h+='<div class="mu" data-fp="'+i+'" style="margin-top:6px">'+fp(p)+'</div>';
+    h+='<div class="row"><div><div class="mu">Lowest final price ₹</div><input data-f="lf" data-i="'+i+'" type="number" placeholder="Lowest final price" value="'+esc(lowest(p))+'"></div></div>';
+    h+='<div class="mu" style="margin-top:6px">Price tiers — when total qty reaches:</div>';
+    (p.tiers||[]).forEach((t,j)=>{
+      h+='<div class="row"><input type="number" data-f="tm" data-i="'+i+'" data-j="'+j+'" placeholder="Min qty" value="'+esc(t.min)+'"><input type="number" data-f="tp" data-i="'+i+'" data-j="'+j+'" placeholder="Final price ₹" value="'+esc(t.price)+'"><button class="btn o" style="padding:6px 10px;font-size:13px" data-x="dt" data-i="'+i+'" data-j="'+j+'">✕</button></div>';
+    });
+    h+='<div class="row"><button class="btn o" style="padding:6px 10px;font-size:13px" data-x="at" data-i="'+i+'">+ Add tier</button><button class="btn o" style="padding:6px 10px;font-size:13px;color:var(--er)" data-x="dp" data-i="'+i+'">Delete product</button></div></div>';
+  });
+  h+='<div class="row"><button class="btn o" data-x="ap">+ Add product</button><button class="btn" data-x="save">Save changes</button></div><div class="mu" id="am"></div>';
+  $('#set').innerHTML=h;
+}
+
+$('#set').addEventListener('input',e=>{
+  const t=e.target,f=t.dataset.f;if(!f)return;touched=true;
+  const i=t.dataset.i,j=t.dataset.j;
+  if(f==='dl')DR.deadline=t.value?new Date(t.value).toISOString():'';
+  else if(f==='dv')DR.deliveryDate=t.value;
+  else if(f==='dtm')DR.deliveryTime=t.value;
+  else if(f==='dto')DR.deliveryTo=t.value;
+  else if(f==='dc')DR.deliveryCharge=parseFloat(t.value)||0;
+  else if(f==='bn')DR.brandName=t.value;
+  else if(f==='tgf')DR.tagline=t.value;
+  else if(f==='care')DR.care=t.value;
+  else if(f==='upi')DR.upiId=t.value;
+  else if(f==='notes')DR.notes=t.value;
+  else if(f==='n')DR.products[i].name=t.value;
+  else if(f==='pr')DR.products[i].price=parseFloat(t.value)||0;
+  else if(f==='tm')DR.products[i].tiers[j].min=parseInt(t.value,10)||0;
+  else if(f==='tp'){DR.products[i].tiers[j].price=parseFloat(t.value)||0;const lf=document.querySelector('[data-f="lf"][data-i="'+i+'"]');if(lf)lf.value=lowest(DR.products[i]);}
+  else if(f==='lf'){const v=parseFloat(t.value)||0,P=DR.products[i];P.tiers=P.tiers||[];if(!P.tiers.length){P.tiers.push({min:10,price:v});drawSet();}else{let k=0;P.tiers.forEach((x,m)=>{if((+x.price||0)<(+P.tiers[k].price||0))k=m});P.tiers[k].price=v;const inp=document.querySelector('[data-f="tp"][data-i="'+i+'"][data-j="'+k+'"]');if(inp)inp.value=t.value;}}
+  if(i!==undefined&&DR.products[i]){const el=document.querySelector('[data-fp="'+i+'"]');if(el)el.innerHTML=fp(DR.products[i]);}
+  if(f!=='lf'&&i!==undefined&&DR.products[i]){const lf=document.querySelector('[data-f="lf"][data-i="'+i+'"]');if(lf)lf.value=lowest(DR.products[i]);}
+});
+
+$('#set').addEventListener('change',async e=>{
+  const t=e.target;
+  if(t.dataset.up!=null&&t.files[0]){
+    $('#am').textContent='Uploading image…';const i=t.dataset.up,fl=t.files[0],im=new Image();
+    im.onload=async()=>{
+      const isLg=t.dataset.lg!=null,mt=isLg?'image/png':'image/jpeg';
+      const k=Math.min(1,(isLg?400:700)/Math.max(im.width,im.height));
+      const c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      try{const url=await run('uploadImage',TK,c.toDataURL(mt,.85).split(',')[1],mt,fl.name.replace(/\.\w+$/,'')+(isLg?'.png':'.jpg'));
+        if(isLg)DR.logo=url;else DR.products[i].img=url;touched=true;drawSet()}
+      catch(x){$('#am').textContent='Upload failed: '+(x.message||x)}
+    };im.src=URL.createObjectURL(fl);
+  }
+});
+
+$('#set').addEventListener('click',async e=>{
+  const b=e.target.closest('button[data-x]');if(!b)return;touched=true;const x=b.dataset.x,i=b.dataset.i,j=b.dataset.j;
+  if(x==='save'){
+    const p1=(document.querySelector('[data-f="apw"]')||{}).value||'',p2=(document.querySelector('[data-f="apw2"]')||{}).value||'';
+    if(p1&&p1.length<4){$('#am').textContent='New password must be at least 4 characters.';return}
+    if(p1&&p1!==p2){$('#am').textContent='Passwords do not match.';return}
+    const save=Object.assign({},DR);if(p1)save.adminPw=p1;
+    $('#am').textContent='Saving…';
+    try{await run('adminSave',TK,save);touched=false;await load();$('#am').textContent='✅ Saved. Customers see the changes now.';}
+    catch(err){$('#am').textContent='Save failed: '+(err.message||err);}return;
+  }
+  if(x==='rl')DR.logo='';
+  else if(x==='ap')DR.products.push({id:'p'+Math.random().toString(36).slice(2,8),name:'',price:0,img:'',tiers:[]});
+  else if(x==='dp'){if(!confirm('Delete this product?'))return;DR.products.splice(i,1)}
+  else if(x==='at')DR.products[i].tiers.push({min:10,price:0});
+  else if(x==='dt')DR.products[i].tiers.splice(j,1);
+  drawSet();
+});
+
+function drawRest(){
+  const T=D.totals,P=D.products;let sq=0,sa=0;
+  $('#sum').innerHTML='<h3 style="margin:0 0 8px">Summary</h3>'+(P.length?
+    '<table><tr><th>Product</th><th>Base price</th><th>Total qty</th><th>Customers</th><th>Final price/pc</th><th>Amount</th><th>Next tier</th></tr>'+
+    P.map(p=>{const q=T[p.id]||0,pr=priceAt(p,q),nx=tiers(p).find(t=>+t.min>q);sq+=q;sa+=q*pr;
+      return '<tr><td>'+esc(p.name)+'</td><td>'+inr(p.price)+'</td><td><b>'+q+'</b></td><td>'+D.orders.filter(o=>o.items[p.id]>0).length+'</td><td>'+inr(pr)+'</td><td>'+inr(q*pr)+'</td><td>'+(nx?(nx.min-q)+' more → '+inr(nx.price):'Top tier')+'</td></tr>'}).join('')+
+    '<tr><td><b>Total</b></td><td></td><td><b>'+sq+'</b></td><td><b>'+D.orders.length+'</b></td><td></td><td><b>'+inr(sa)+'</b></td><td></td></tr></table>':'<div class="mu">No products yet.</div>');
+  $('#ord').innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><h3 style="flex:1;margin:0">Orders ('+D.orders.length+')</h3><button class="btn o" style="padding:6px 10px;font-size:13px" id="csv">⬇ CSV</button></div>'+
+    (D.orders.length?
+    '<table><tr><th>#</th><th>Updated</th><th>Name</th><th>Mobile</th><th>Full address</th><th>Items</th><th>Products</th><th>Delivery</th><th>Total Value</th><th>UTR</th><th>Payment</th><th></th></tr>'+
+    D.orders.map((o,n)=>
+      '<tr><td>'+(n+1)+'</td><td>'+esc(new Date(o.ts).toLocaleString())+'</td><td>'+esc(o.name)+'</td><td>'+esc(o.phone)+'</td>'+
+      '<td class="w2">'+esc(o.addr)+'</td><td class="w2">'+esc(o.text)+'</td>'+
+      '<td>'+inr(o.final)+'</td><td>'+inr(o.deliveryCharge||0)+'</td><td><b>'+inr(o.total||o.final)+'</b></td>'+
+      '<td>'+esc(o.utr||'—')+'</td>'+
+      '<td><span class="pst '+(o.payStatus||'')+'">'+esc(o.payStatus||'—')+'</span> '+
+      '<select data-ps="'+esc(o.phone)+'" style="font-size:12px;border:1px solid var(--bd);border-radius:6px;padding:3px">'+
+      '<option value="">Set…</option><option value="verified">✅ Verified</option><option value="pending">⏳ Pending</option><option value="rejected">❌ Rejected</option></select></td>'+
+      '<td style="white-space:nowrap"><button class="btn o" style="padding:4px 8px;font-size:12px" data-eo="'+esc(o.phone)+'">Edit</button> '+
+      '<button class="btn o" style="padding:4px 8px;font-size:12px;color:var(--er)" data-do="'+esc(o.phone)+'">Del</button></td></tr>'
+    ).join('')+
+    '<tr><td colspan="6"><b>Grand total</b></td>'+
+    '<td>'+inr(D.orders.reduce((a,o)=>a+(+o.final||0),0))+'</td>'+
+    '<td>'+inr(D.orders.reduce((a,o)=>a+(+o.deliveryCharge||0),0))+'</td>'+
+    '<td><b>'+inr(D.orders.reduce((a,o)=>a+(+o.total||+o.final||0),0))+'</b></td>'+
+    '<td></td><td></td><td></td></tr></table>':'<div class="mu">No orders yet.</div>');
+  document.getElementById('csv').onclick=()=>{
+    const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+    const head=['Updated','Name','Mobile','Full address'].concat(P.map(p=>p.name+' (qty)'),['Products value','Delivery charges','Total Value','Delivery date']);
+    const rows=D.orders.map(o=>[new Date(o.ts).toLocaleString(),o.name,"'"+o.phone,o.addr].concat(P.map(p=>(o.items[p.id]||0)),[o.final,o.deliveryCharge||0,o.total||o.final,D.deliveryDate]));
+    const csv='\ufeff'+[head].concat(rows).map(r=>r.map(q).join(',')).join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='orders.csv';document.body.appendChild(a);a.click();a.remove();
+  };
+}
+
+$('#ord').addEventListener('change',async e=>{
+  const sel=e.target.closest('select[data-ps]');if(!sel||!sel.value)return;
+  if(!confirm('Mark "'+sel.value+'" for '+sel.dataset.ps+'?')){sel.value='';return}
+  try{await run('adminSetPayStatus',TK,sel.dataset.ps,sel.value);await load()}catch(x){alert(x.message||x);sel.value=''}
+});
+
+let EO='';
+const eoDiv=document.createElement('div');
+eoDiv.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:60;align-items:center;justify-content:center;padding:16px';
+eoDiv.innerHTML='<div class="cd" style="width:min(460px,100%);max-height:90vh;overflow:auto;margin:0"><h3 id="eoT"></h3><div class="mu">Set qty. 0 removes the product.</div><div id="eoB"></div><div id="eoE" style="color:var(--er);font-size:13px;margin-top:6px"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn o" id="eoC">Cancel</button><button class="btn" id="eoS">Save order</button></div></div>';
+document.body.appendChild(eoDiv);
+document.getElementById('eoC').onclick=()=>{eoDiv.style.display='none'};
+document.getElementById('eoS').onclick=async()=>{
+  const items={};document.querySelectorAll('#eoB input[data-q]').forEach(i=>{const q=Math.max(0,parseInt(i.value,10)||0);if(q>0)items[i.dataset.q]=q});
+  try{await run('adminEditOrder',TK,EO,items);eoDiv.style.display='none';await load()}catch(x){document.getElementById('eoE').textContent=x.message||x}
+};
+$('#ord').addEventListener('click',async e=>{
+  const b=e.target.closest('button[data-eo],button[data-do]');if(!b)return;
+  if(b.dataset.do){if(!confirm('Delete order of '+b.dataset.do+'?'))return;try{await run('adminDeleteOrder',TK,b.dataset.do);await load()}catch(x){alert(x.message||x)}return}
+  const o=D.orders.find(x=>x.phone===b.dataset.eo);if(!o)return;EO=o.phone;
+  document.getElementById('eoT').textContent='Edit – '+o.name+' ('+o.phone+')';
+  document.getElementById('eoB').innerHTML=D.products.map(p=>'<div style="display:flex;gap:8px;align-items:center;margin:6px 0"><div style="flex:2">'+esc(p.name)+'</div><input type="number" min="0" data-q="'+p.id+'" value="'+(o.items[p.id]||0)+'" style="width:80px"></div>').join('');
+  document.getElementById('eoE').textContent='';eoDiv.style.display='flex';
+});
+
+(async()=>{
+  const p=LS.g('gp'),tk=LS.g('gt');
+  if(p&&tk){try{await enter(p,tk)}catch(e){}}
+  else if(TK){load()}
+})();
+</script></body></html>
